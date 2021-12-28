@@ -20,8 +20,8 @@ for ip in iter(ip_addr):
         S5130 = {
             'device_type': 'hp_comware',
             'ip': ip,
-            'username': 'zhangyueping',
-            'password': 'ZYP!@#$.c0m',
+            'username': 'xxxxxxxxx',
+            'password': 'xxxxxxxxx',
         }
         net_connect = ConnectHandler(**S5130)
 
