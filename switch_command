@@ -1,0 +1,41 @@
+import time
+from netmiko import *
+import sys
+import os
+import getpass
+
+# 读取iplist.txt 文档里面的ip地址
+iplist = open('ip_list.txt', 'r', encoding='ascii')
+ip_addr = iplist.readlines()
+iplist.close()
+
+cmdlist = open('cmd_list.txt', 'r', encoding='ascii')
+cmd_line = cmdlist.readlines()
+cmdlist.close()
+
+# 遍历ip_addr这个列表里面的ip进行连接
+for ip in iter(ip_addr):
+    print(ip)
+    try:
+        S5130 = {
+            'device_type': 'hp_comware',
+            'ip': ip,
+            'username': 'zhangyueping',
+            'password': 'ZYP!@#$.c0m',
+        }
+        net_connect = ConnectHandler(**S5130)
+
+        for cmd in iter(cmd_line):
+            cmd_result = net_connect.send_command(cmd)
+            print('-----------------------------------------------------------------')
+            print(cmd)
+            print(cmd_result)
+            print('-----------------------------------------------------------------')
+            print('')
+            with open('log.txt', 'a') as f:
+                f.write(f"\n======================================================================\n{ip},{cmd_result}")
+        net_connect.disconnect()
+    except (EOFError, NetMikoTimeoutException):
+        print('Can not connect to Device')
+    except (EOFError, NetMikoAuthenticationException):
+        print('username/password wrong!')
